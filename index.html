@@ -85,6 +85,20 @@
   }
   .kpi.highlight { border-color: var(--accent); }
 
+  /* ── Selector de ciclo ── */
+  .cycle-picker { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .cycle-picker label { font-size: .7rem; color: var(--textdim); text-transform: uppercase; letter-spacing: .06em; }
+  .cycle-picker select {
+    background: var(--navy2); color: var(--white); border: 1px solid var(--accent);
+    border-radius: 4px; padding: 6px 28px 6px 10px; font-size: .85rem; font-family: inherit; cursor: pointer;
+  }
+  .note { font-size: .7rem; color: var(--textdim); margin-top: 10px; line-height: 1.5; }
+  .egr-input {
+    width: 70px; background: var(--navy); color: var(--white); border: 1px solid var(--border);
+    border-radius: 3px; padding: 3px 6px; font-family: inherit; font-size: .8rem;
+  }
+  .badge-pend { background: #22282f; color: #8899aa; }
+
   /* ── Grid ── */
   .grid {
     display: grid;
@@ -175,6 +189,13 @@
 <header>
   <h1>Dashboard Académico — LTEI</h1>
   <span>Reporte Inicial de Estudiantes</span>
+  <div class="cycle-picker">
+    <label for="selCiclo">Ciclo</label>
+    <select id="selCiclo">
+      <option value="2026B" selected>2026B</option>
+      <option value="2026A">2026A</option>
+    </select>
+  </div>
 </header>
 
 <!-- KPIs -->
@@ -183,32 +204,32 @@
   <div class="kpi-row">
     <div class="kpi highlight">
       <div class="kpi-label">Total matriculados</div>
-      <div class="kpi-value">547</div>
+      <div class="kpi-value" id="kTotal">547</div>
     </div>
     <div class="kpi">
       <div class="kpi-label">Activos</div>
-      <div class="kpi-value">508</div>
-      <div class="kpi-sub">92.9 % del total</div>
+      <div class="kpi-value" id="kAct">508</div>
+      <div class="kpi-sub" id="kActS">92.9 % del total</div>
     </div>
     <div class="kpi">
       <div class="kpi-label">Índice de deserción</div>
-      <div class="kpi-value">2.7%</div>
-      <div class="kpi-sub">15 bajas registradas</div>
+      <div class="kpi-value" id="kDes">2.7%</div>
+      <div class="kpi-sub" id="kDesS">15 bajas registradas</div>
     </div>
     <div class="kpi">
       <div class="kpi-label">Con reprobadas</div>
-      <div class="kpi-value">24.5%</div>
-      <div class="kpi-sub">134 de 547 alumnos</div>
+      <div class="kpi-value" id="kRep">24.5%</div>
+      <div class="kpi-sub" id="kRepS">134 de 547 alumnos</div>
     </div>
     <div class="kpi">
       <div class="kpi-label">Bajo rendimiento</div>
-      <div class="kpi-value">27.0%</div>
-      <div class="kpi-sub">137 activos (prom &lt; 70)</div>
+      <div class="kpi-value" id="kBajo">27.0%</div>
+      <div class="kpi-sub" id="kBajoS">137 activos (prom &lt; 70)</div>
     </div>
     <div class="kpi highlight">
       <div class="kpi-label">Promedio general</div>
-      <div class="kpi-value">88.3</div>
-      <div class="kpi-sub">Excluye promedio 0</div>
+      <div class="kpi-value" id="kProm">88.3</div>
+      <div class="kpi-sub" id="kPromS">Excluye promedio 0</div>
     </div>
   </div>
 </section>
@@ -264,13 +285,13 @@
       <div style="padding-top:8px">
         <div class="prog-row">
           <span class="prog-label">Regular</span>
-          <div class="prog-track"><div class="prog-fill" style="width:75.5%"></div></div>
-          <span class="prog-val">413</span>
+          <div class="prog-track"><div class="prog-fill" id="pgReg" style="width:75.5%"></div></div>
+          <span class="prog-val" id="pvReg">413</span>
         </div>
         <div class="prog-row">
           <span class="prog-label">Irregular</span>
-          <div class="prog-track"><div class="prog-fill" style="width:24.5%; background:#3a5a7a"></div></div>
-          <span class="prog-val">134</span>
+          <div class="prog-track"><div class="prog-fill" id="pgIrr" style="width:24.5%; background:#3a5a7a"></div></div>
+          <span class="prog-val" id="pvIrr">134</span>
         </div>
       </div>
       <div style="height:20px"></div>
@@ -290,38 +311,7 @@
               <th>Clasificación</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Activo</td>
-              <td>508</td>
-              <td>92.9 %</td>
-              <td><span class="badge badge-ok">Normal</span></td>
-            </tr>
-            <tr>
-              <td>Alumno en Art. 34</td>
-              <td>23</td>
-              <td>4.2 %</td>
-              <td><span class="badge badge-warn">Riesgo</span></td>
-            </tr>
-            <tr>
-              <td>Baja por Art. 35</td>
-              <td>12</td>
-              <td>2.2 %</td>
-              <td><span class="badge badge-bad">Baja</span></td>
-            </tr>
-            <tr>
-              <td>Baja voluntaria</td>
-              <td>3</td>
-              <td>0.5 %</td>
-              <td><span class="badge badge-bad">Baja</span></td>
-            </tr>
-            <tr>
-              <td>Alumno por intercambio</td>
-              <td>1</td>
-              <td>0.2 %</td>
-              <td><span class="badge badge-ok">Normal</span></td>
-            </tr>
-          </tbody>
+          <tbody id="tbEstatus"></tbody>
         </table>
       </div>
       <div style="height:20px"></div>
@@ -331,19 +321,579 @@
           <thead>
             <tr><th>Categoría</th><th>Alumnos</th><th>%</th></tr>
           </thead>
-          <tbody>
-            <tr><td>Al día o adelante</td><td>404</td><td>73.9 %</td></tr>
-            <tr><td>0 a −2 %</td><td>34</td><td>6.2 %</td></tr>
-            <tr><td>−2 a −5 %</td><td>46</td><td>8.4 %</td></tr>
-            <tr><td>−5 a −10 %</td><td>31</td><td>5.7 %</td></tr>
-            <tr><td>Más de −10 %</td><td>32</td><td>5.8 %</td></tr>
-          </tbody>
+          <tbody id="tbRezago"></tbody>
         </table>
       </div>
     </div>
 
   </div>
 </section>
+
+<!-- Ingreso vs egreso -->
+<section>
+  <div class="section-label">Ingreso y egreso — últimos 4 años</div>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="card-title">Ingresos vs. egresados por año (mínimo esperado: 40 % del ingreso)</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="chartEgreso"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Detalle y cumplimiento del 40 %</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr><th>Año</th><th>Ingreso</th><th>Mínimo 40 %</th><th>Egresados</th><th>% egreso</th><th>Estado</th></tr>
+          </thead>
+          <tbody id="tbEgreso"></tbody>
+        </table>
+      </div>
+      <p class="note">Ingreso = suma de los dos ciclos del año. Los egresados son editables: captura la cifra real
+      en las celdas vacías y la gráfica y el estado se actualizan. 2026 se marca «En curso» porque el año no ha concluido.</p>
+    </div>
+  </div>
+</section>
+
+<script type="text/plain" id="csv2026B">Estatus,Ciclo ingreso,¿Registró inglés?,Diferencia créditos,Porcentaje reprobadas,Situación,Promedio
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025A,No,0.0,0.0,Regular,83.4118
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ALUMNO EN ART 34,2024A,No,-0.2104,1.0,Irregular,86.9444
+BAJA POR ART 35,2022B,Sí,-0.0396,0.0,Regular,82.375
+ACTIVO,2026A,Sí,0.0,0.0,Regular,93.5
+ACTIVO,2026A,No,0.0,0.0,Regular,92.0
+ACTIVO,2025B,No,-0.0495,0.4286,Irregular,87.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,No,0.0,0.0,Regular,96.4167
+ACTIVO,2023A,No,0.0,0.0,Regular,89.7407
+ACTIVO,2026A,No,0.0,0.0,Regular,80.6667
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023A,No,0.0,0.0,Regular,78.6667
+ACTIVO,2024B,No,-0.0248,0.1667,Irregular,87.8636
+ACTIVO,2026A,No,0.0,0.0,Regular,84.4
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,No,0.0,0.0,Regular,87.25
+ALUMNO POR INTERCAMBIO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,Sí,0.0,0.1667,Irregular,89.7
+ACTIVO,2026A,Sí,0.0,0.0,Regular,99.4
+ACTIVO,2024B,Sí,-0.0817,0.6667,Irregular,86.3846
+ACTIVO,2024B,No,0.0,0.0,Regular,79.2381
+ACTIVO,2025A,Sí,-0.2228,1.0,Irregular,93.4286
+ACTIVO,2026A,No,0.0,0.0,Regular,95.4
+ACTIVO,2024B,No,0.0,0.0,Regular,91.5263
+ACTIVO,2026A,No,0.0,0.0,Regular,91.625
+ACTIVO,2024A,No,0.0,0.0,Regular,91.64
+ACTIVO,2025B,Sí,-0.0198,0.1667,Irregular,87.3
+ACTIVO,2025B,No,0.0,0.0,Regular,98.3
+ACTIVO,2026A,No,0.0,0.1667,Irregular,70.8
+ACTIVO,2025B,No,0.0,0.0,Regular,99.3
+ACTIVO,2024A,No,0.0,0.0,Regular,80.25
+ALUMNO EN ART 34,2023B,No,0.0,0.0,Regular,87.2353
+ACTIVO,2020A,No,0.0,0.0,Regular,80.275
+ACTIVO,2026A,No,-0.0842,0.8333,Irregular,73.0
+ACTIVO,2025B,No,0.0,0.0,Regular,88.3
+ACTIVO,2023A,No,-0.0173,0.0,Regular,86.1053
+ACTIVO,2025B,Sí,-0.0198,0.1667,Irregular,85.4
+ACTIVO,2024A,No,0.0,0.0,Regular,98.0
+ALUMNO EN ART 34,2024A,No,-0.0644,0.4286,Irregular,75.3125
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024A,No,0.0,0.0,Regular,85.8148
+ACTIVO,2024B,No,0.0,0.0,Regular,93.95
+ACTIVO,2025A,No,0.0,0.0,Regular,98.0
+ACTIVO,2023A,No,0.0,0.0,Regular,88.0588
+ACTIVO,2023B,No,0.0,0.0,Regular,92.9118
+ACTIVO,2024A,No,0.0,0.0,Regular,93.2759
+ACTIVO,2020A,No,0.0,0.0,Regular,85.1892
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,-0.0743,0.5,Irregular,87.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,Sí,0.0,0.0,Regular,91.2222
+ACTIVO,2025B,No,0.0,0.0,Regular,93.4444
+ACTIVO,2023B,No,0.0,0.0,Regular,93.1053
+ACTIVO,2026A,No,0.0,0.0,Regular,98.3333
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024B,No,0.0,0.0,Regular,95.2727
+ACTIVO,2026A,No,0.0,0.0,Regular,98.8
+ACTIVO,2024A,No,0.0,0.0,Regular,83.8261
+ACTIVO,2018A,No,-0.0198,0.3333,Irregular,73.9744
+ACTIVO,2026A,Sí,0.0,0.0,Regular,98.8333
+BAJA POR ART 35,2024B,Sí,-0.0198,0.0,Regular,89.0
+BAJA POR ART 35,2022A,No,0.0,0.0,Regular,77.1333
+ACTIVO,2024B,No,0.0,0.0,Regular,92.75
+ACTIVO,2025B,Sí,-0.0248,0.1111,Irregular,86.0
+ACTIVO,2023B,No,0.0,0.0,Regular,88.0
+ALUMNO EN ART 34,2020A,No,-0.1881,0.8,Irregular,78.2
+ACTIVO,2024A,No,0.0,0.0,Regular,97.0
+ALUMNO EN ART 34,2025B,No,-0.1881,1.0,Irregular,81.1538
+ACTIVO,2023A,No,0.0,0.0,Regular,89.6667
+ACTIVO,2025B,No,-0.0495,0.3333,Irregular,75.1667
+ACTIVO,2026A,No,0.0,0.0,Regular,87.8889
+ACTIVO,2022A,No,0.0,0.0,Regular,91.575
+ALUMNO EN ART 34,2025B,No,-0.0792,0.3,Irregular,75.125
+ACTIVO,2026A,No,0.0,0.0,Regular,91.0
+ALUMNO EN ART 34,2022A,No,-0.0842,0.8,Irregular,83.7931
+ACTIVO,2023B,No,0.0,0.0,Regular,95.5588
+ACTIVO,2023A,No,-0.0792,0.4286,Irregular,83.4839
+ACTIVO,2026A,Sí,0.0,0.0,Regular,98.8
+ALUMNO EN ART 34,2022B,No,-0.0743,0.0,Regular,74.7857
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,Sí,-0.0198,0.2,Irregular,94.1111
+ACTIVO,2025A,No,0.0,0.0,Regular,90.9375
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,Sí,-0.0198,0.2,Irregular,94.4444
+ACTIVO,2024B,No,0.0,0.0,Regular,92.8421
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,Sí,0.0,0.0,Regular,79.4
+ACTIVO,2026A,No,-0.1139,1.0,Irregular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024A,Sí,-0.0198,0.1111,Irregular,89.3824
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,0.0,0.0,Regular,90.4286
+ACTIVO,2025B,Sí,0.0,0.0,Regular,97.5
+ACTIVO,2022B,No,0.0,0.0,Regular,85.0303
+ACTIVO,2026A,No,0.0,0.0,Regular,85.0
+ACTIVO,2024A,No,0.0,0.0,Regular,89.0588
+ACTIVO,2025A,No,0.0,0.0,Regular,96.5714
+ACTIVO,2024B,No,0.0,0.0,Regular,95.1714
+ACTIVO,2023A,No,0.0,0.0,Regular,87.6774
+ACTIVO,2024A,No,-0.0743,0.6,Irregular,70.625
+ACTIVO,2025B,No,0.0,0.0,Regular,91.0
+ALUMNO EN ART 34,2025A,Sí,-0.0198,0.1429,Irregular,86.4118
+ACTIVO,2025B,Sí,0.0,0.0,Regular,96.8889
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024A,No,-0.0248,0.2,Irregular,97.8571
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,0.0,0.0,Regular,97.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,Sí,0.0,0.0,Regular,90.4
+BAJA POR ART 35,2018A,No,-0.1238,0.0,Regular,84.3171
+BAJA POR ART 35,2020A,No,-0.203,0.0,Regular,79.3333
+ACTIVO,2026A,Sí,-0.104,0.7143,Irregular,71.0
+ACTIVO,2024A,No,0.0,0.1667,Irregular,98.125
+ACTIVO,2025B,Sí,0.0,0.0,Regular,83.4
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023A,No,0.0,0.0,Regular,85.037
+ACTIVO,2024A,No,0.0,0.0,Regular,98.6429
+ACTIVO,2026A,No,-0.1139,1.0,Irregular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,Sí,0.0,0.0,Regular,93.4
+BAJA POR ART 33,2022B,Sí,-0.1609,1.0,Irregular,78.381
+ACTIVO,2023B,No,-0.0198,0.1667,Irregular,83.0345
+ACTIVO,2023A,No,0.0,0.0,Regular,99.1316
+ACTIVO,2022B,No,0.0,0.0,Regular,96.0488
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,No,-0.0198,0.1429,Irregular,78.5
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023A,No,0.0,0.0,Regular,87.963
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024A,No,0.0,0.0,Regular,79.5882
+ACTIVO,2025B,Sí,0.0,0.0,Regular,91.9
+ACTIVO,2023A,Sí,0.0,0.0,Regular,88.1667
+ACTIVO,2025A,No,0.0,0.0,Regular,97.8
+ACTIVO,2026A,No,0.0,0.0,Regular,93.6
+ACTIVO,2026A,Sí,0.0,0.0,Regular,98.6
+ACTIVO,2026A,Sí,0.0,0.0,Regular,67.6
+ACTIVO,2024A,No,-0.0817,0.6667,Irregular,87.8125
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024A,No,-0.0693,0.75,Irregular,78.2632
+ACTIVO,2025B,No,0.0,0.0,Regular,96.1
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,Sí,0.0,0.0,Regular,100.0
+ACTIVO,2025A,No,-0.0198,0.1667,Irregular,93.875
+ACTIVO,2026A,Sí,0.0,0.0,Regular,86.8
+ACTIVO,2026A,Sí,0.0,0.0,Regular,90.8
+ACTIVO,2019B,No,-0.0248,0.1667,Irregular,84.1316
+ACTIVO,2026A,Sí,0.0,0.0,Regular,100.0
+BAJA POR ART 35,2023A,Sí,-0.0446,0.0,Regular,79.1212
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,0.0,0.0,Regular,94.6
+ACTIVO,2025A,No,0.0,0.0,Regular,88.4091
+ACTIVO,2023A,No,0.0,0.0,Regular,81.68
+ACTIVO,2023A,No,-0.0248,0.1667,Irregular,82.2812
+BAJA POR ART 35,2024A,No,-0.1436,1.0,Irregular,69.2857
+ACTIVO,2024B,No,0.0,0.0,Regular,93.25
+ACTIVO,2024B,No,0.0,0.0,Regular,87.85
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024B,No,0.0,0.0,Regular,96.7
+ACTIVO,2022B,No,-0.0396,0.6,Irregular,80.8889
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,Sí,-0.0198,0.1429,Irregular,88.8
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023B,No,0.0,0.0,Regular,96.6667
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2022B,No,0.0,0.0,Regular,98.55
+ACTIVO,2025B,Sí,0.0,0.0,Regular,90.5
+ACTIVO,2026A,Sí,0.0,0.0,Regular,79.8
+ACTIVO,2024A,No,0.0,0.0,Regular,83.1724
+ACTIVO,2023B,No,0.0,0.0,Regular,92.6452
+ACTIVO,2026A,Sí,-0.0248,0.1667,Irregular,86.75
+ACTIVO,2024B,No,0.0,0.0,Regular,98.85
+ACTIVO,2024B,No,0.0,0.0,Regular,98.7143
+ACTIVO,2024B,No,0.0,0.0,Regular,93.4
+ACTIVO,2026A,No,0.0,0.0,Regular,89.8
+ACTIVO,2025A,No,0.0,0.0,Regular,99.7391
+ACTIVO,2025A,No,0.0,0.0,Regular,92.8
+ACTIVO,2023B,No,0.0,0.0,Regular,99.3939
+ACTIVO,2026A,No,0.0,0.1667,Irregular,92.6
+ACTIVO,2024A,No,0.0,0.0,Regular,98.1667
+ACTIVO,2019B,No,0.0,0.0,Regular,92.3158
+ACTIVO,2024A,No,-0.0866,1.0,Irregular,87.85
+ACTIVO,2021B,Sí,0.0,0.0,Regular,85.0682
+BAJA POR ART 35,2024A,Sí,-0.0248,0.0,Regular,86.7059
+ACTIVO,2025A,No,0.0,0.0,Regular,95.6429
+ACTIVO,2026A,No,0.0,0.0,Regular,94.0
+ACTIVO,2026A,No,-0.1139,1.0,Irregular,0.0
+ACTIVO,2025B,Sí,-0.099,0.7143,Irregular,86.1429
+ACTIVO,2023A,No,0.0,0.0,Regular,97.1
+ACTIVO,2026A,No,0.0,0.0,Regular,95.8
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023B,No,0.0,0.0,Regular,81.0571
+ACTIVO,2025B,No,0.0,0.2,Irregular,72.8
+ACTIVO,2024B,No,0.0,0.0,Regular,96.05
+ACTIVO,2024B,Sí,-0.0198,0.1429,Irregular,90.7143
+BAJA POR ART 35,2023A,No,-0.1089,1.0,Irregular,92.1
+ALUMNO EN ART 34,2025B,No,-0.0446,0.4,Irregular,67.6667
+ACTIVO,2023B,No,0.0,0.0,Regular,85.9333
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023A,No,0.0,0.0,Regular,83.125
+ACTIVO,2024B,No,-0.0248,0.1667,Irregular,86.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025A,No,0.0,0.0,Regular,94.375
+ACTIVO,2023A,No,0.0,0.0,Regular,96.7949
+ACTIVO,2022B,No,0.0,0.0,Regular,90.1667
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023A,No,0.0,0.0,Regular,96.359
+ACTIVO,2026A,No,0.0,0.0,Regular,82.0
+ACTIVO,2025A,Sí,-0.0495,0.4,Irregular,76.8182
+ACTIVO,2026A,No,0.0,0.0,Regular,97.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,Sí,-0.0198,0.2,Irregular,87.5
+ACTIVO,2023B,No,0.0,0.0,Regular,93.6
+ACTIVO,2024B,No,-0.0248,0.2,Irregular,91.1111
+ACTIVO,2023B,No,-0.0198,0.0,Regular,87.1724
+ACTIVO,2024A,No,-0.0248,0.2,Irregular,74.5938
+ACTIVO,2022B,No,0.0,0.0,Regular,87.2051
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024B,No,0.0,0.0,Regular,91.7368
+ACTIVO,2025B,Sí,-0.0446,0.3333,Irregular,90.1111
+ACTIVO,2026A,No,-0.0198,0.1667,Irregular,96.75
+ACTIVO,2023A,No,0.0,0.0,Regular,99.9744
+ACTIVO,2025A,No,0.0,0.0,Regular,96.2
+ACTIVO,2026A,No,0.0,0.0,Regular,89.8
+ACTIVO,2026A,Sí,0.0,0.0,Regular,83.8
+ACTIVO,2026A,Sí,0.0,0.0,Regular,95.8
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,Sí,0.0,0.0,Regular,96.4
+ACTIVO,2025B,Sí,0.0,0.0,Regular,88.7778
+ACTIVO,2025B,Sí,0.0,0.0,Regular,85.1
+ACTIVO,2026A,No,0.0,0.0,Regular,94.2
+ACTIVO,2026A,No,0.0,0.0,Regular,83.0
+ACTIVO,2023B,No,0.0,0.0,Regular,89.9
+ALUMNO EN ART 34,2025B,No,-0.0446,0.6,Irregular,78.8333
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,Sí,0.0,0.0,Regular,96.6
+ACTIVO,2026A,No,0.0,0.0,Regular,98.6
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024B,No,0.0,0.0,Regular,90.0
+ACTIVO,2025B,No,0.0,0.0,Regular,94.6154
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,No,0.0,0.0,Regular,95.1
+ACTIVO,2024A,No,0.0,0.0,Regular,89.8846
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,Sí,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024B,No,0.0,0.0,Regular,81.65
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,Sí,-0.0594,0.5714,Irregular,81.6667
+ACTIVO,2024A,No,0.0,0.0,Regular,93.6538
+ACTIVO,2026A,No,0.0,0.0,Regular,97.1667
+ACTIVO,2026A,Sí,0.0,0.0,Regular,99.6
+ACTIVO,2024A,No,0.0,0.0,Regular,96.5926
+ACTIVO,2024A,No,0.0,0.0,Regular,95.5
+ACTIVO,2026A,Sí,0.0,0.0,Regular,83.6
+ACTIVO,2025A,No,-0.0198,0.1667,Irregular,88.1765
+ACTIVO,2024B,No,0.0,0.0,Regular,89.5625
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,0.0,0.0,Regular,89.2
+ACTIVO,2025A,No,0.0,0.0,Regular,93.6667
+ACTIVO,2024B,No,0.0,0.0,Regular,96.3889
+ACTIVO,2024B,No,0.0,0.0,Regular,95.0588
+ACTIVO,2024A,No,0.0,0.0,Regular,97.3333
+BAJA POR ART 35,2024B,Sí,-0.0644,0.0,Regular,71.4
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023B,No,0.0,0.0,Regular,96.0625
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+BAJA POR ART 35,2024B,No,-0.0198,0.0,Regular,85.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ALUMNO POR INTERCAMBIO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024A,No,0.0,0.1429,Irregular,80.9474
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+BAJA POR ART 35,2024A,Sí,-0.1757,0.25,Irregular,85.3636
+ACTIVO,2023A,No,-0.1188,1.0,Irregular,80.5135
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ALUMNO EN ART 34,2024B,Sí,-0.0248,0.0,Regular,83.75
+ACTIVO,2020B,No,0.0,0.0,Regular,91.0732
+ACTIVO,2024A,No,0.0,0.0,Regular,91.2857
+ACTIVO,2025B,No,0.0,0.0,Regular,98.0
+ACTIVO,2025A,No,0.0,0.0,Regular,98.4
+ACTIVO,2022A,No,0.0,0.0,Regular,86.5
+ALUMNO EN ART 34,2025B,No,-0.0297,0.0,Regular,84.9
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025A,No,0.0,0.0,Regular,95.6429
+ACTIVO,2026A,No,0.0,0.0,Regular,90.4
+ACTIVO,2024A,No,0.0,0.0,Regular,93.6522
+ACTIVO,2025A,No,0.0,0.0,Regular,88.7895
+ACTIVO,2024A,No,-0.0792,0.6,Irregular,81.4211
+ACTIVO,2024B,No,0.0,0.0,Regular,78.125
+ACTIVO,2026A,No,0.0,0.0,Regular,76.6
+ACTIVO,2026A,No,0.0,0.0,Regular,91.6
+ALUMNO EN ART 34,2025A,No,-0.0173,0.0,Regular,84.1111
+ACTIVO,2023B,No,0.0,0.0,Regular,94.2941
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025A,No,0.0,0.0,Regular,93.2667
+ACTIVO,2025A,No,-0.0198,0.25,Irregular,88.4167
+ACTIVO,2023A,No,0.0,0.0,Regular,82.9091
+ACTIVO,2025A,No,0.0,0.0,Regular,98.6667
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,0.0,0.0,Regular,98.8333
+ACTIVO,2026A,No,0.0,0.0,Regular,97.5
+ACTIVO,2022A,No,0.0,0.0,Regular,84.1622
+ACTIVO,2026A,No,0.0,0.0,Regular,92.8
+ACTIVO,2022A,No,0.0,0.2,Irregular,82.8684
+ACTIVO,2025B,No,-0.0198,0.1667,Irregular,81.7778
+ACTIVO,2026A,No,-0.0495,0.5,Irregular,70.0
+BAJA POR ART 35,2020B,No,-0.0198,0.0,Regular,83.1579
+ACTIVO,2026A,No,0.0,0.0,Regular,78.3333
+ACTIVO,2025B,No,0.0,0.0,Regular,93.1667
+BAJA POR ART 35,2023A,No,-0.0198,0.0,Regular,88.6875
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,0.0,0.0,Regular,91.6
+ACTIVO,2023B,No,0.0,0.0,Regular,99.5152
+ACTIVO,2025B,Sí,0.0,0.0,Regular,90.0
+ACTIVO,2026A,No,0.0,0.0,Regular,99.8
+ACTIVO,2025A,No,0.0,0.0,Regular,96.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+BAJA POR ART 35,2024B,Sí,-0.0198,0.2857,Irregular,88.6875
+ACTIVO,2023B,No,0.0,0.0,Regular,88.6087
+ALUMNO EN ART 34,2020B,No,-0.1064,1.0,Irregular,74.8529
+ACTIVO,2026B,Sí,0.0,0.0,Regular,0.0
+ACTIVO,2025B,No,0.0,0.0,Regular,97.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2019A,No,0.0,0.0,Regular,94.9
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2022A,No,0.0,0.0,Regular,85.6061
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+BAJA POR ART 33,2025B,No,-0.1881,1.0,Irregular,0.0
+ACTIVO,2026A,No,0.0,0.0,Regular,95.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,-0.1139,1.0,Irregular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2024A,No,0.0,0.0,Regular,86.6786
+ACTIVO,2025B,Sí,0.0,0.0,Regular,96.6667
+ACTIVO,2025B,No,0.0,0.125,Irregular,95.5833
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023B,No,0.0,0.0,Regular,87.7812
+ACTIVO,2026A,No,0.0,0.0,Regular,98.4
+ACTIVO,2022A,No,0.0,0.0,Regular,91.5
+ACTIVO,2024A,No,0.0,0.0,Regular,87.0385
+ACTIVO,2024B,No,0.0,0.0,Regular,94.2105
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023A,No,0.0,0.0,Regular,93.1316
+ACTIVO,2023A,No,0.0,0.0,Regular,91.9231
+ACTIVO,2024A,No,0.0,0.0,Regular,96.2143
+ALUMNO POR INTERCAMBIO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,No,-0.099,1.0,Irregular,95.0
+ACTIVO,2018A,No,-0.0891,0.8,Irregular,79.9268
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,Sí,0.0,0.0,Regular,94.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ALUMNO EN ART 34,2023B,Sí,-0.0941,1.0,Irregular,76.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023A,No,-0.1188,1.0,Irregular,96.8485
+ACTIVO,2024A,No,0.0,0.0,Regular,93.0571
+ALUMNO POR INTERCAMBIO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,0.0,0.0,Regular,99.6
+ACTIVO,2023B,No,0.0,0.0,Regular,98.5714
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023B,No,0.0,0.0,Regular,90.9412
+ACTIVO,2025A,No,0.0,0.0,Regular,92.4667
+ACTIVO,2025B,Sí,0.0,0.2,Irregular,94.4444
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025A,Sí,-0.1089,0.5556,Irregular,82.0769
+ACTIVO,2026A,No,0.0,0.0,Regular,94.9333
+BAJA POR ART 35,2016B,No,-0.1238,0.0,Regular,87.2353
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+BAJA POR ART 35,2024B,No,0.0,0.0,Regular,91.9474
+ACTIVO,2023B,No,0.0,0.0,Regular,93.96
+ACTIVO,2022B,No,0.0,0.0,Regular,98.0526
+BAJA POR ART 35,2023B,No,-0.1386,0.0,Regular,77.6667
+ACTIVO,2023B,No,0.0,0.0,Regular,98.4138
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023B,No,0.0,0.0,Regular,92.9697
+ACTIVO,2022B,No,0.0,0.0,Regular,98.1176
+ACTIVO,2025A,No,0.0,0.0,Regular,85.8571
+ACTIVO,2026A,Sí,0.0,0.0,Regular,89.8
+BAJA POR ART 35,2022A,No,-0.1114,0.0,Regular,91.5714
+ACTIVO,2023B,No,0.0,0.0,Regular,94.5312
+ACTIVO,2025B,No,0.0,0.0,Regular,95.1
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023B,No,0.0,0.0,Regular,92.3939
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,No,0.0,0.0,Regular,91.8
+ALUMNO EN ART 34,2025A,Sí,-0.0198,0.0,Regular,89.0833
+ACTIVO,2025A,No,0.0,0.0,Regular,92.7857
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,No,0.0,0.1667,Irregular,93.5
+ACTIVO,2025A,No,0.0,0.0,Regular,85.5385
+ACTIVO,2024A,No,0.0,0.0,Regular,80.5714
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025A,No,0.0,0.0,Regular,87.4667
+ACTIVO,2024B,No,0.0,0.0,Regular,95.1111
+ALUMNO EN ART 34,2025B,No,-0.0446,0.6,Irregular,75.6667
+ALUMNO EN ART 34,2021A,Sí,-0.0198,0.0,Regular,91.7073
+ACTIVO,2025B,No,0.0,0.0,Regular,93.6364
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ALUMNO EN ART 34,2025B,No,0.0,0.0,Regular,93.5
+ACTIVO,2025A,Sí,-0.0396,0.4,Irregular,74.6667
+ACTIVO,2026A,No,0.0,0.1667,Irregular,92.0
+ACTIVO,2026A,No,0.0,0.1667,Irregular,71.6
+BAJA POR ART 35,2025A,No,-0.0594,1.0,Irregular,72.0
+ACTIVO,2023B,No,0.0,0.0,Regular,97.6667
+ALUMNO EN ART 34,2023A,Sí,-0.0743,0.6667,Irregular,82.5294
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,0.0,0.0,Regular,86.8
+ACTIVO,2026A,No,0.0,0.0,Regular,94.4
+ACTIVO,2024B,No,0.0,0.0,Regular,96.7143
+BAJA POR ART 35,2022B,Sí,-0.0644,0.1667,Irregular,80.9444
+BAJA POR ART 35,2023A,No,-0.2252,0.8,Irregular,87.08
+ALUMNO EN ART 34,2020A,No,-0.0297,0.0,Regular,84.6829
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,Sí,0.0,0.0,Regular,0.0
+ACTIVO,2024B,No,0.0,0.0,Regular,96.4211
+ACTIVO,2022A,No,-0.0198,0.0,Regular,87.4516
+ACTIVO,2023B,No,0.0,0.0,Regular,79.0
+ACTIVO,2025A,No,-0.0198,0.125,Irregular,92.6316
+ALUMNO EN ART 34,2025A,Sí,-0.0198,0.0,Regular,93.6
+ACTIVO,2024B,No,0.0,0.0,Regular,96.1111
+ACTIVO,2023A,No,0.0,0.0,Regular,79.44
+ACTIVO,2026A,No,0.0,0.1667,Irregular,85.2
+ACTIVO,2023A,No,0.0,0.0,Regular,97.0
+ACTIVO,2022B,Sí,0.0,0.0,Regular,83.0588
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,-0.0198,0.1667,Irregular,72.5
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ALUMNO EN ART 34,2023A,No,-0.0693,0.2857,Irregular,79.2692
+ACTIVO,2023B,No,0.0,0.0,Regular,97.7895
+BAJA POR ART 35,2021A,No,-0.1931,0.8,Irregular,87.0
+ACTIVO,2023B,No,-0.0248,0.1429,Irregular,79.0952
+ACTIVO,2025B,Sí,-0.0198,0.1818,Irregular,90.5714
+ACTIVO,2026B,Sí,0.0,0.0,Regular,0.0
+ACTIVO,2025B,No,0.0,0.0,Regular,87.8889
+ACTIVO,2026B,Sí,0.0,0.0,Regular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,-0.0198,0.3333,Irregular,64.75
+ACTIVO,2024A,No,0.0,0.0,Regular,91.8889
+ACTIVO,2026A,Sí,0.0,0.0,Regular,93.8
+ACTIVO,2024A,No,-0.0198,0.0,Regular,97.9412
+ALUMNO EN ART 34,2023B,Sí,-0.0198,0.2,Irregular,81.2609
+ALUMNO EN ART 34,2019B,Sí,-0.0916,0.0,Regular,77.4091
+ACTIVO,2025B,No,0.0,0.0,Regular,94.3
+ACTIVO,2026A,No,-0.0693,0.5,Irregular,88.0
+ACTIVO,2024A,No,0.0,0.0,Regular,81.5714
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2021B,No,0.0,0.0,Regular,93.65
+ALUMNO EN ART 34,2022B,Sí,0.0,0.0,Regular,85.8684
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,Sí,0.0,0.0,Regular,96.8571
+ACTIVO,2025B,No,0.0,0.0,Regular,97.0909
+ACTIVO,2025B,No,0.0,0.0,Regular,98.1
+ACTIVO,2022A,No,0.0,0.0,Regular,98.6429
+ACTIVO,2024B,No,0.0,0.0,Regular,89.2105
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2023B,No,-0.0198,0.0,Regular,92.1613
+ACTIVO,2023B,No,0.0,0.0,Regular,99.303
+ACTIVO,2025B,Sí,-0.0198,0.2,Irregular,93.1111
+ACTIVO,2023A,No,0.0,0.0,Regular,94.45
+ACTIVO,2026A,No,-0.0198,0.3333,Irregular,80.5
+ACTIVO,2026A,Sí,0.0,0.0,Regular,92.8
+ALUMNO EN ART 34,2024B,Sí,-0.1163,1.0,Irregular,68.125
+ACTIVO,2026A,Sí,0.0,0.0,Regular,87.8333
+ACTIVO,2026A,No,0.0,0.0,Regular,96.8
+ACTIVO,2022A,No,-0.0248,0.2,Irregular,75.9474
+ACTIVO,2024B,Sí,-0.0594,0.5,Irregular,73.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2025B,Sí,-0.0495,0.4,Irregular,82.8571
+ALUMNO EN ART 34,2025A,Sí,-0.0198,0.0,Regular,90.1429
+ACTIVO,2021B,No,0.0,0.0,Regular,75.4595
+ACTIVO,2024A,No,-0.0248,0.25,Irregular,76.8889
+ACTIVO,2026A,No,0.0,0.0,Regular,97.0
+ACTIVO,2022A,No,0.0,0.0,Regular,96.35
+ACTIVO,2021B,No,-0.0965,0.625,Irregular,76.3462
+ACTIVO,2023B,No,0.0,0.0,Regular,96.7317
+ACTIVO,2023A,No,-0.0248,0.2,Irregular,78.1562
+ACTIVO,2024B,No,0.0,0.0,Regular,96.9474
+BAJA POR ART 35,2024A,No,-0.0693,0.75,Irregular,72.1818
+ACTIVO,2022B,No,0.0,0.0,Regular,94.4865
+ACTIVO,2023A,No,0.0,0.0,Regular,91.7632
+ACTIVO,2026A,Sí,0.0,0.0,Regular,89.0
+ACTIVO,2026A,No,-0.0396,0.3333,Irregular,69.3333
+ACTIVO,2026A,No,0.0,0.0,Regular,96.2
+ACTIVO,2023B,No,0.0,0.0,Regular,94.8125
+ACTIVO,2025A,No,0.0,0.0,Regular,88.8571
+ACTIVO,2023B,No,0.0,0.0,Regular,97.2121
+ACTIVO,2023B,Sí,-0.0891,0.5714,Irregular,72.6316
+ACTIVO,2025A,No,-0.0198,0.1667,Irregular,85.5
+ACTIVO,2026A,No,0.0,0.0,Regular,97.4
+ACTIVO,2026A,No,0.0,0.0,Regular,99.2
+ACTIVO,2026A,No,-0.0446,0.5,Irregular,68.0
+ACTIVO,2023B,No,0.0,0.0,Regular,98.7429
+ACTIVO,2026A,No,-0.0446,0.5,Irregular,82.6667
+ACTIVO,2026A,Sí,0.0,0.0,Regular,97.0
+ALUMNO EN ART 34,2023B,No,-0.0446,0.1429,Irregular,82.7
+ACTIVO,2026A,Sí,-0.0198,0.3333,Irregular,73.5
+ACTIVO,2025B,No,0.0,0.0,Regular,83.5556
+BAJA POR ART 35,2023A,No,-0.0644,0.125,Irregular,80.4444
+ACTIVO,2025A,No,0.0,0.0,Regular,97.0417
+BAJA POR ART 35,2024A,No,-0.0941,1.0,Irregular,72.625
+ACTIVO,2026A,No,-0.1139,1.0,Irregular,0.0
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ALUMNO EN ART 34,2022B,No,-0.0198,0.0,Regular,81.7812
+ACTIVO,2024A,Sí,-0.1906,0.8889,Irregular,79.0909
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ACTIVO,2026A,No,-0.0198,0.1667,Irregular,91.0
+ACTIVO,2026A,No,0.0,0.0,Regular,98.6
+ACTIVO,2026B,No,0.0,0.0,Regular,0.0
+ALUMNO EN ART 34,2023A,Sí,-0.1139,0.8333,Irregular,77.6
+ACTIVO,2023B,No,0.0,0.0,Regular,85.4545
+ACTIVO,2024B,No,0.0,0.0,Regular,90.8
+ACTIVO,2020B,No,0.0,0.0,Regular,81.0909
+ACTIVO,2024A,No,0.0,0.1667,Irregular,86.2963
+ACTIVO,2024A,No,0.0,0.0,Regular,89.2857
+</script>
 
 <script>
 const C = {
@@ -374,148 +924,183 @@ const tooltipBase = {
   padding: 10,
 };
 
-// 1. Donut — Estatus
-new Chart(document.getElementById('chartEstatus'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Activo', 'Art. 34', 'Baja Art.35', 'Baja voluntaria', 'Intercambio'],
-    datasets: [{
-      data: [508, 23, 12, 3, 1],
-      backgroundColor: ['#2c5f8a','#3a7ab5','#1a3a54','#4a8fb5','#7aaed3'],
-      borderWidth: 0,
-      hoverOffset: 4,
-    }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    cutout: '62%',
-    plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12 } },
-      tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` }, ...tooltipBase },
-    }
+
+/* ─────────── Datos por ciclo ─────────── */
+const PALETA = ['#2c5f8a','#3a7ab5','#1a3a54','#4a8fb5','#7aaed3','#5299d3'];
+const COLORES5 = ['#2c5f8a','#3a7ab5','#4a8fb5','#6aabcf','#8ac3e0'];
+const CLASIF = { 'ACTIVO':['Activo','Normal','ok'], 'ALUMNO EN ART 34':['Alumno en Art. 34','Riesgo','warn'],
+  'ALUMNO POR INTERCAMBIO':['Alumno por intercambio','Normal','ok'], 'BAJA POR ART 33':['Baja por Art. 33','Baja','bad'],
+  'BAJA POR ART 35':['Baja por Art. 35','Baja','bad'], 'BAJA VOLUNTARIA':['Baja voluntaria','Baja','bad'] };
+
+// 2026A: registro anterior (valores del dashboard original)
+const DATA = {};
+DATA['2026A'] = {
+  total:547, activos:508, bajas:15, irregulares:134, bajo:137, prom:88.3,
+  estatus:[['ACTIVO',508],['ALUMNO EN ART 34',23],['BAJA POR ART 35',12],['BAJA VOLUNTARIA',3],['ALUMNO POR INTERCAMBIO',1]],
+  reprob:[401,54,26,7,20], promedio:[0,4,62,151,193], rezago:[404,34,46,31,32],
+  ciclos:{labels:["2016A","2016B","2018A","2018B","2019A","2019B","2020A","2020B","2021A","2021B","2022A","2022B","2023A","2023B","2024A","2024B","2025A","2025B","2026A"],
+          counts:[1,1,2,2,1,5,8,3,4,12,19,36,40,49,54,57,50,88,131]},
+  regular:413, irregular:134, ingles:[117,430]
+};
+
+/* ─────────── 2026B: se calcula desde el CSV ─────────── */
+function parseCSV(t){
+  const rows=[]; let row=[], cur='', q=false;
+  for(let i=0;i<t.length;i++){
+    const ch=t[i];
+    if(q){ if(ch==='"'){ if(t[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=ch; }
+    else if(ch==='"') q=true;
+    else if(ch===','){ row.push(cur); cur=''; }
+    else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&t[i+1]==='\n') i++; row.push(cur); cur=''; if(row.length>1||row[0]!=='') rows.push(row); row=[]; }
+    else cur+=ch;
   }
+  if(cur!==''||row.length){ row.push(cur); rows.push(row); }
+  const h=rows.shift().map(s=>s.replace(/^\uFEFF/,'').trim());
+  return rows.map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]])));
+}
+function statsFromCSV(text){
+  const R=parseCSV(text.trim());
+  const n=v=>{const x=parseFloat(v);return isNaN(x)?0:x;};
+  const act=R.filter(r=>r['Estatus']==='ACTIVO');
+  const cnt={}; R.forEach(r=>cnt[r['Estatus']]=(cnt[r['Estatus']]||0)+1);
+  const rp=act.map(r=>n(r['Porcentaje reprobadas']));
+  const reprob=[rp.filter(x=>x===0).length, rp.filter(x=>x>0&&x<=.25).length, rp.filter(x=>x>.25&&x<=.5).length,
+                rp.filter(x=>x>.5&&x<=.75).length, rp.filter(x=>x>.75).length];
+  const pa=act.map(r=>n(r['Promedio'])).filter(x=>x>0);
+  const promedio=[pa.filter(x=>x<60).length, pa.filter(x=>x>=60&&x<70).length, pa.filter(x=>x>=70&&x<80).length,
+                  pa.filter(x=>x>=80&&x<90).length, pa.filter(x=>x>=90).length];
+  const df=R.map(r=>n(r['Diferencia créditos']));
+  const rezago=[df.filter(x=>x>=0).length, df.filter(x=>x<0&&x>=-.02).length, df.filter(x=>x<-.02&&x>=-.05).length,
+                df.filter(x=>x<-.05&&x>=-.10).length, df.filter(x=>x<-.10).length];
+  const cic={}; R.forEach(r=>{const c=r['Ciclo ingreso']; if(c) cic[c]=(cic[c]||0)+1;});
+  const labels=Object.keys(cic).sort();
+  const todos=R.map(r=>n(r['Promedio'])).filter(x=>x>0);
+  const bajas=R.filter(r=>/^BAJA/.test(r['Estatus'])).length;
+  const orden=['ACTIVO','ALUMNO EN ART 34','BAJA POR ART 35','BAJA POR ART 33','BAJA VOLUNTARIA','ALUMNO POR INTERCAMBIO'];
+  const estatus=orden.filter(k=>cnt[k]).map(k=>[k,cnt[k]]);
+  Object.keys(cnt).forEach(k=>{ if(!orden.includes(k)) estatus.push([k,cnt[k]]); });
+  const irr=R.filter(r=>r['Situación']==='Irregular').length;
+  const si=R.filter(r=>/^s[ií]$/i.test((r['¿Registró inglés?']||'').trim())).length;
+  return { total:R.length, activos:act.length, bajas, irregulares:irr,
+    bajo:act.filter(r=>n(r['Promedio'])<70).length,
+    prom:todos.reduce((a,b)=>a+b,0)/todos.length,
+    estatus, reprob, promedio, rezago,
+    ciclos:{labels, counts:labels.map(l=>cic[l])},
+    regular:R.length-irr, irregular:irr, ingles:[si,R.length-si] };
+}
+DATA['2026B'] = statsFromCSV(document.getElementById('csv2026B').textContent);
+
+/* ─────────── Gráficas ─────────── */
+const bar = (id, colors, extra={}) => new Chart(document.getElementById(id), {
+  type:'bar',
+  data:{ labels:[], datasets:[{ label:'Alumnos', data:[], backgroundColor:colors, borderWidth:0, borderRadius:3 }] },
+  options:{ maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipBase },
+    scales:{ x:{grid:{display:false}}, y:{grid:{color:C.border}, ticks:{color:C.textdim}} }, ...extra }
+});
+const chEstatus = new Chart(document.getElementById('chartEstatus'), {
+  type:'doughnut',
+  data:{ labels:[], datasets:[{ data:[], backgroundColor:PALETA, borderWidth:0, hoverOffset:4 }] },
+  options:{ maintainAspectRatio:false, cutout:'62%', plugins:{
+    legend:{ position:'bottom', labels:{ boxWidth:10, padding:12 } },
+    tooltip:{ callbacks:{ label: ctx => ` ${ctx.label}: ${ctx.raw}` }, ...tooltipBase } } }
+});
+const chReprob = bar('chartReprobacion', COLORES5);
+const chProm   = bar('chartPromedio', '#3a7ab5');
+const chRezago = bar('chartRezago', COLORES5, { indexAxis:'y',
+  scales:{ x:{grid:{color:C.border}, ticks:{color:C.textdim}}, y:{grid:{display:false}} } });
+const chCiclos = new Chart(document.getElementById('chartCiclos'), {
+  type:'line',
+  data:{ labels:[], datasets:[{ label:'Alumnos ingresados', data:[], borderColor:C.accent2,
+    backgroundColor:'rgba(58,122,181,0.12)', borderWidth:2, fill:true, tension:.3, pointRadius:3, pointBackgroundColor:C.accent2 }] },
+  options:{ maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:tooltipBase },
+    scales:{ x:{grid:{display:false}, ticks:{maxRotation:45, color:C.textdim}}, y:{grid:{color:C.border}, ticks:{color:C.textdim}} } }
+});
+const chIngles = new Chart(document.getElementById('chartIngles'), {
+  type:'doughnut',
+  data:{ labels:['Registró inglés','No registró'], datasets:[{ data:[0,0], backgroundColor:[C.accent2, C.navy3], borderWidth:0 }] },
+  options:{ maintainAspectRatio:false, cutout:'55%', plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, padding:12 } }, tooltip:tooltipBase } }
 });
 
-// 2. Bar — Reprobación
-new Chart(document.getElementById('chartReprobacion'), {
-  type: 'bar',
-  data: {
-    labels: ['0 %', '1–25 %', '26–50 %', '51–75 %', '> 75 %'],
-    datasets: [{
-      label: 'Alumnos',
-      data: [401, 54, 26, 7, 20],
-      backgroundColor: ['#2c5f8a','#3a7ab5','#4a8fb5','#6aabcf','#8ac3e0'],
-      borderWidth: 0,
-      borderRadius: 3,
-    }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: tooltipBase },
-    scales: {
-      x: { grid: { display: false } },
-      y: { grid: { color: C.border }, ticks: { color: C.textdim } }
-    }
-  }
-});
+/* ─────────── Render por ciclo ─────────── */
+const pct = (a,b) => (b? (100*a/b).toFixed(1) : '0.0');
+const $ = id => document.getElementById(id);
+function setChart(ch, labels, data){ if(labels) ch.data.labels=labels; ch.data.datasets[0].data=data; ch.update(); }
 
-// 3. Bar — Promedio
-new Chart(document.getElementById('chartPromedio'), {
-  type: 'bar',
-  data: {
-    labels: ['< 60', '60–70', '70–80', '80–90', '90–100'],
-    datasets: [{
-      label: 'Alumnos',
-      data: [0, 4, 62, 151, 193],
-      backgroundColor: '#3a7ab5',
-      borderWidth: 0,
-      borderRadius: 3,
-    }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: tooltipBase },
-    scales: {
-      x: { grid: { display: false } },
-      y: { grid: { color: C.border }, ticks: { color: C.textdim } }
-    }
-  }
-});
+function render(ciclo){
+  const d = DATA[ciclo];
+  $('kTotal').textContent = d.total;
+  $('kAct').textContent = d.activos;                 $('kActS').textContent = pct(d.activos,d.total)+' % del total';
+  $('kDes').textContent = pct(d.bajas,d.total)+'%';  $('kDesS').textContent = d.bajas+' bajas registradas';
+  $('kRep').textContent = pct(d.irregulares,d.total)+'%'; $('kRepS').textContent = d.irregulares+' de '+d.total+' alumnos';
+  $('kBajo').textContent = pct(d.bajo,d.activos)+'%'; $('kBajoS').innerHTML = d.bajo+' activos (prom &lt; 70)';
+  $('kProm').textContent = d.prom.toFixed(1);
 
-// 4. Horizontal bar — Rezago
-new Chart(document.getElementById('chartRezago'), {
-  type: 'bar',
-  data: {
-    labels: ['Al día o adelante', '0 a −2 %', '−2 a −5 %', '−5 a −10 %', 'Más de −10 %'],
-    datasets: [{
-      label: 'Alumnos',
-      data: [404, 34, 46, 31, 32],
-      backgroundColor: ['#2c5f8a','#3a7ab5','#4a8fb5','#6aabcf','#8ac3e0'],
-      borderWidth: 0,
-      borderRadius: 3,
-    }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    indexAxis: 'y',
-    plugins: { legend: { display: false }, tooltip: tooltipBase },
-    scales: {
-      x: { grid: { color: C.border }, ticks: { color: C.textdim } },
-      y: { grid: { display: false } }
-    }
-  }
-});
+  setChart(chEstatus, d.estatus.map(e=>(CLASIF[e[0]]||[e[0]])[0]), d.estatus.map(e=>e[1]));
+  setChart(chReprob, ['0 %','1–25 %','26–50 %','51–75 %','> 75 %'], d.reprob);
+  setChart(chProm, ['< 60','60–70','70–80','80–90','90–100'], d.promedio);
+  setChart(chRezago, ['Al día o adelante','0 a −2 %','−2 a −5 %','−5 a −10 %','Más de −10 %'], d.rezago);
+  setChart(chCiclos, d.ciclos.labels, d.ciclos.counts);
+  chIngles.data.datasets[0].data = d.ingles; chIngles.update();
 
-// 5. Line — Matrícula por ciclo
-const cicloLabels = ["2016A","2016B","2018A","2018B","2019A","2019B","2020A","2020B","2021A","2021B","2022A","2022B","2023A","2023B","2024A","2024B","2025A","2025B","2026A"];
-const cicloCounts = [1,1,2,2,1,5,8,3,4,12,19,36,40,49,54,57,50,88,131];
-new Chart(document.getElementById('chartCiclos'), {
-  type: 'line',
-  data: {
-    labels: cicloLabels,
-    datasets: [{
-      label: 'Alumnos ingresados',
-      data: cicloCounts,
-      borderColor: C.accent2,
-      backgroundColor: 'rgba(58,122,181,0.12)',
-      borderWidth: 2,
-      fill: true,
-      tension: 0.3,
-      pointRadius: 3,
-      pointBackgroundColor: C.accent2,
-    }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: tooltipBase },
-    scales: {
-      x: { grid: { display: false }, ticks: { maxRotation: 45, color: C.textdim } },
-      y: { grid: { color: C.border }, ticks: { color: C.textdim } }
-    }
-  }
-});
+  $('pgReg').style.width = pct(d.regular,d.total)+'%'; $('pvReg').textContent = d.regular;
+  $('pgIrr').style.width = pct(d.irregular,d.total)+'%'; $('pvIrr').textContent = d.irregular;
 
-// 6. Donut — Inglés (quick compute from raw: registró sí/no)
-// From CSV: ¿Registró inglés? — values assumed Si/No; reuse known counts
-new Chart(document.getElementById('chartIngles'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Registró inglés', 'No registró'],
-    datasets: [{
-      data: [117, 430],
-      backgroundColor: [C.accent2, C.navy3],
-      borderWidth: 0,
-    }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    cutout: '55%',
-    plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12 } },
-      tooltip: tooltipBase,
-    }
-  }
+  $('tbEstatus').innerHTML = d.estatus.map(([k,v])=>{
+    const c = CLASIF[k]||[k,'—','warn'];
+    return `<tr><td>${c[0]}</td><td>${v}</td><td>${pct(v,d.total)} %</td><td><span class="badge badge-${c[2]}">${c[1]}</span></td></tr>`;
+  }).join('');
+  const nom = ['Al día o adelante','0 a −2 %','−2 a −5 %','−5 a −10 %','Más de −10 %'];
+  $('tbRezago').innerHTML = d.rezago.map((v,i)=>`<tr><td>${nom[i]}</td><td>${v}</td><td>${pct(v,d.total)} %</td></tr>`).join('');
+}
+$('selCiclo').addEventListener('change', e => render(e.target.value));
+render($('selCiclo').value);
+
+/* ─────────── Ingreso vs egreso (últimos 4 años) ─────────── */
+// egresados: null = pendiente de captura. Ingreso = suma de los dos ciclos del año.
+const EGRESO = [
+  { anio:2023, detalle:'2023A 106 + 2023B 111', ingreso:217, egresados:89, enCurso:false },
+  { anio:2024, detalle:'2024A 108 + 2024B 112', ingreso:220, egresados:88, enCurso:false },
+  { anio:2025, detalle:'2025A 64 + 2025B 88',   ingreso:152, egresados:74,   enCurso:false },
+  { anio:2026, detalle:'2026A 131 + 2026B 118', ingreso:249, egresados:41,   enCurso:true  },
+];
+const META = 0.40;
+const chEgreso = new Chart($('chartEgreso'), {
+  type:'bar',
+  data:{ labels:EGRESO.map(e=>e.anio), datasets:[
+    { label:'Ingreso', data:[], backgroundColor:'#2c5f8a', borderWidth:0, borderRadius:3 },
+    { label:'Egresados', data:[], backgroundColor:'#8ac3e0', borderWidth:0, borderRadius:3 },
+    { type:'line', label:'Mínimo 40 % del ingreso', data:[], borderColor:'#c9b86a', borderDash:[6,4], borderWidth:2,
+      pointRadius:4, pointBackgroundColor:'#c9b86a', fill:false, tension:0 } ] },
+  options:{ maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, padding:12 } }, tooltip:tooltipBase },
+    scales:{ x:{grid:{display:false}}, y:{grid:{color:C.border}, ticks:{color:C.textdim}, beginAtZero:true} } }
 });
+function renderEgreso(){
+  const min = e => Math.ceil(e.ingreso*META);
+  chEgreso.data.datasets[0].data = EGRESO.map(e=>e.ingreso);
+  chEgreso.data.datasets[1].data = EGRESO.map(e=>e.egresados);
+  chEgreso.data.datasets[2].data = EGRESO.map(min);
+  chEgreso.update();
+  $('tbEgreso').innerHTML = EGRESO.map((e,i)=>{
+    let p='—', badge='<span class="badge badge-pend">Pendiente</span>';
+    if(e.egresados!==null){
+      p = pct(e.egresados,e.ingreso)+' %';
+      const ok = e.egresados>=min(e);
+      badge = ok ? '<span class="badge badge-ok">Cumple</span>'
+               : e.enCurso ? '<span class="badge badge-warn">En curso</span>'
+               : '<span class="badge badge-bad">No cumple</span>';
+    }
+    return `<tr><td>${e.anio}</td><td title="${e.detalle}">${e.ingreso}</td><td>${min(e)}</td>
+      <td><input class="egr-input" type="number" min="0" data-i="${i}" value="${e.egresados??''}" placeholder="—"></td>
+      <td>${p}</td><td>${badge}</td></tr>`;
+  }).join('');
+}
+$('tbEgreso').addEventListener('change', ev=>{
+  const t=ev.target; if(!t.classList.contains('egr-input')) return;
+  EGRESO[+t.dataset.i].egresados = t.value===''? null : Math.max(0,parseInt(t.value,10));
+  renderEgreso();
+});
+renderEgreso();
 </script>
 </body>
 </html>
